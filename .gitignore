@@ -6,6 +6,7 @@
 */*.depend
 */*.layout
 */*.o
+*/*.cbp
 
 # 忽略 目錄下的資料夾
 */obj/
