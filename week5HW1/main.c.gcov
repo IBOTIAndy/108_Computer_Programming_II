@@ -1,0 +1,68 @@
+        -:    0:Source:main.c
+        -:    0:Graph:main.gcno
+        -:    0:Data:main.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include <stdio.h> // main.c
+        -:    2:#include <math.h>
+        -:    3:#include <assert.h>
+function computeBMI called 6 returned 100% blocks executed 100%
+        6:    4:double computeBMI(int kg, int height) {
+        6:    5:    double BMI = 0.0, M = height/100.0;
+        6:    6:    if (kg<=0 || height<=0)
+branch  0 taken 4 (fallthrough)
+branch  1 taken 2
+branch  2 taken 1 (fallthrough)
+branch  3 taken 3
+        3:    7:        return 0;
+        3:    8:    BMI = round(100*kg/(M*M))/100; //四捨五入取兩位小數
+        3:    9:    if (BMI <18.5)
+branch  0 taken 1 (fallthrough)
+branch  1 taken 2
+        1:   10:        return -1;
+        2:   11:    if (BMI >24)
+branch  0 taken 1 (fallthrough)
+branch  1 taken 1
+        1:   12:        return -2;
+        1:   13:    return BMI;
+        -:   14:}
+        -:   15:
+function main called 1 returned 100% blocks executed 71%
+        1:   16:int main() {
+        1:   17:    int kg = 52, height = 155;
+        1:   18:    double expectedResult = 21.64f;
+        1:   19:    double result = computeBMI(kg, height);
+call    0 returned 1
+        1:   20:    assert(fabs(result-expectedResult) < 0.0001);
+branch  0 taken 0 (fallthrough)
+branch  1 taken 1
+call    2 never executed
+        1:   21:    assert(computeBMI(0, height) == 0);
+call    0 returned 1
+branch  1 taken 0 (fallthrough)
+branch  2 taken 1
+call    3 never executed
+        1:   22:    assert(computeBMI(kg, 0) == 0);
+call    0 returned 1
+branch  1 taken 0 (fallthrough)
+branch  2 taken 1
+call    3 never executed
+        1:   23:    assert(computeBMI(0, 0) == 0);
+call    0 returned 1
+branch  1 taken 0 (fallthrough)
+branch  2 taken 1
+call    3 never executed
+        1:   24:    assert(computeBMI(1, height) == -1);
+call    0 returned 1
+branch  1 taken 0 (fallthrough)
+branch  2 taken 1
+call    3 never executed
+        1:   25:    assert(computeBMI(kg, 100) == -2);
+call    0 returned 1
+branch  1 taken 0 (fallthrough)
+branch  2 taken 1
+call    3 never executed
+        1:   26:    printf("Hi\n");
+call    0 returned 1
+        1:   27:    return 0;
+        -:   28:}
