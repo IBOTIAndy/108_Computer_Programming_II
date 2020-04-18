@@ -3,6 +3,13 @@
 //017 長整數運算
 //2020/04/18 PM. 04:55 IBOTIAndy
 
+void arrayEmpty(int a[], int n){
+    int i=0;
+    for(i=0; i < n; i++){
+        a[i] = 0;
+    }
+}
+
 void push(int number[], int n){     //將陣列的資料往後推，n 為目前最高位元
     int i=0;
     for(i=n; i > 0; i--){           //不斷地推，直到將個位數推走
@@ -141,11 +148,27 @@ void bigNumberMath(int mathO, int number1[], int number2[], int ans[], int n){
     }
 }
 
+void output(int ans[], int n){
+    int i=0;
+    for(i=n-1; i >= 0; i--){
+        if(ans[i] != 0){
+            break;
+        }
+    }
+    while(i >= 0){
+        printf("%d", ans[i]);
+        i = i - 1;
+    }
+}
+
 int main(){
     int mathO=0, number1[50]={0}, number2[50]={0}, ans[100]={0};
+    arrayEmpty(number1, 50);
+    arrayEmpty(number2, 50);
+    arrayEmpty(ans, 100);
     input(&mathO, number1, number2, 50);
     bigNumberMath(mathO, number1, number2, ans, 50);
-    //output(ans, 100);
+    output(ans, 100);
 //    printf("Hello world!\n");
     return 0;
 }
