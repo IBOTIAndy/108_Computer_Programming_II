@@ -98,6 +98,27 @@ void negative(int ans[], int n){    //加上負號
     }
 }
 
+int muler(int *carry, int number1, int number2){    //乘法器
+    int mul=0;
+    mul = (number1 * number2) + *carry; //兩數相乘 再 +進位
+    *carry = mul / 10;  //取進位 (商)
+    return mul % 10;    //取積   (餘)
+}
+
+void mul2(int number1, int number2[], int ans[], int i, int n){ //
+    int j=0, addCarry=0, mulCarry=0;
+    for(j=0; j <= n; j++){              //處理除數
+        ans[i+j] = adder(&addCarry , ans[i+j], muler(&mulCarry, number1, number2[j]));
+    }   //答案會依據 i(被除數位置) 來位移 使用加法器來確保單個數不會超出範圍 將原本的答案加上新的積
+}
+
+void multBigNumber(int number1[], int number2[], int ans[], int n){ //乘法
+    int i=0;
+    for(i=0; i <= n; i++){                      //處理被除數
+        mul2(number1[i], number2, ans, i, n);   //
+    }
+}
+
 void bigNumberMath(int mathO, int number1[], int number2[], int ans[], int n){
     switch(mathO){
         case 1:     // +
@@ -113,7 +134,7 @@ void bigNumberMath(int mathO, int number1[], int number2[], int ans[], int n){
             }
             break;
         case 3:     // *
-            //multBigNumber(number1, number2, ans, n);
+            multBigNumber(number1, number2, ans, n);
             break;
         default:
             printf("ERROR from \"mathO\"\n");
