@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 //017 長整數運算
-//2020/04/18 PM. 04:55 IBOTIAndy
+//2020/04/18 PM. 09:42 IBOTIAndy
 
 void arrayEmpty(int a[], int n){
     int i=0;
@@ -114,14 +114,14 @@ int muler(int *carry, int number1, int number2){    //乘法器
 
 void mul2(int number1, int number2[], int ans[], int i, int n){ //
     int j=0, addCarry=0, mulCarry=0;
-    for(j=0; j <= n; j++){              //處理除數
+    for(j=0; j < n; j++){               //處理除數
         ans[i+j] = adder(&addCarry , ans[i+j], muler(&mulCarry, number1, number2[j]));
     }   //答案會依據 i(被除數位置) 來位移 使用加法器來確保單個數不會超出範圍 將原本的答案加上新的積
 }
 
 void multBigNumber(int number1[], int number2[], int ans[], int n){ //乘法
     int i=0;
-    for(i=0; i <= n; i++){                      //處理被除數
+    for(i=0; i < n; i++){                       //處理被除數
         mul2(number1[i], number2, ans, i, n);   //
     }
 }
