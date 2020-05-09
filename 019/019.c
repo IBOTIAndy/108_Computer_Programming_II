@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 //019 陣列翻轉
-//2020/05/09 PM. 00:35 IBOTIAndy
+//2020/05/09 PM. 01:09 IBOTIAndy
 
 int array2setNumber(int array[][50], int start, int count, int nC, int nR){ //設定依照順序的數字
     int i=0, j=0;
@@ -49,6 +49,20 @@ int turnR(int array[][50], int n){  //右轉, 順時鐘
     return 0;
 }
 
+int turnL(int array[][50], int n){  //左轉, 逆時鐘
+    int i=0, j=0, temp=0;
+    for(i=0; i < n/2; i++){         //從最外圈開始，逐漸往內縮
+        for(j=i; j < n-1-i; j++){   //每次處理一排
+            temp = array[i][j];
+            array[i][j] = array[j][n-1-i];          //左上 = 右上
+            array[j][n-1-i] = array[n-1-i][n-1-j];  //右上 = 右下
+            array[n-1-i][n-1-j] = array[n-1-j][i];  //右下 = 左下
+            array[n-1-j][i] = temp;                 //左下 = 左上
+        }
+    }
+    return 0;
+}
+
 int f1(){
     int n=0, select=0;
     int array[50][50]={{0}};
@@ -62,6 +76,7 @@ int f1(){
         turnR(array, n);
         break;
     case 3: //逆時鐘翻轉
+        turnL(array, n);
         //
         break;
     case 4: //上下翻轉
