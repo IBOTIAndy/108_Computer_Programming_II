@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 //024 字串修改
-//2020/05/20 PM. 10:12 IBOTIAndy
+//2020/05/20 PM. 10:18 IBOTIAndy
 void input(char *string, char *wordP, char *wordQ){
     gets(string);
     gets(wordP);
@@ -80,6 +80,20 @@ void insertAbeforeB(char *pString[], char *A, char *B){  //在B前方 插入A
     printf("\n");
 }
 
+void deleteA(char *pString[], char *A){ //刪除A
+    int i=0;
+    while(pString[i] != NULL){
+        if(!myStrcmp(pString[i], A)){   //如果與A相等
+            //跳過
+        }
+        else{
+            printf("%s ", pString[i]);
+        }
+        i = i + 1;
+    }
+    printf("\n");
+}
+
 void f1(){
     char string[1000]={' '};
     char wordP[50]={' '};
@@ -90,6 +104,7 @@ void f1(){
     cutString(string, pString);
     AreplaceB(pString, wordQ, wordP);
     insertAbeforeB(pString, wordQ, wordP);
+    deleteA(pString, wordP);
 }
 
 int main(){
