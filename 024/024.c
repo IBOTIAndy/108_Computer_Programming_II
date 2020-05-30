@@ -94,6 +94,41 @@ void deleteA(char *pString[], char *A){ //刪除A
     printf("\n");
 }
 
+int allSelected(int wordNumber[], int n){
+    int i=0;
+    for(i=0; i < n; i++){
+        if(wordNumber[i] != 0){
+            return 0;
+        }
+    }
+    return 1;
+}
+
+void calculatedQuantity(char *string[]){
+    char *tString[50]={' '};
+    int wordNumber[50]={0};
+    int i=0, j=0, k=0, n=0, tempN=0;
+    while(string[i] == NULL){
+        wordNumber[i] = 1;
+        for(j=i+1; string[j] == NULL; j++){
+            if(!myStrcmp(string[i], string[j])){   //如果相等
+                wordNumber++;
+            }
+        }
+        i = i + 1;
+    }
+    for(i=0; wordNumber[i]; i++){
+        n = i;
+    }
+    while(!allSelected(wordNumber, n)){ //找到全部找完
+        for(i=0, j=0; i < n; i++){   //
+            if(wordNumber[i] > wordNumber[j]){  //
+
+            }
+        }
+    }
+}
+
 void f1(){
     char string[1000]={' '};
     char wordP[50]={' '};
@@ -105,6 +140,7 @@ void f1(){
     AreplaceB(pString, wordQ, wordP);
     insertAbeforeB(pString, wordQ, wordP);
     deleteA(pString, wordP);
+    calculatedQuantity(pString);
 }
 
 int main(){
