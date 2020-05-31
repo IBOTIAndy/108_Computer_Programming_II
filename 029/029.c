@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 //029 use structure to math long number
-//2020/05/31 pm. 03:36 IBOTIAndy
+//2020/05/31 pm. 03:36 ~ pm.04:44 IBOTIAndy
+//1:08 = 1:08 +
 typedef struct number_s{
     int number;
     struct number_s *nextR;
@@ -22,9 +23,9 @@ int charChangeToInt(char c){
     return c - '0';
 }
 
-number_t* createNumber(char c){
+number_t* createNumber(int number){
     number_t *newNumber = (number_t*)malloc(sizeof(number_t));
-    newNumber->number = charChangeToInt(c);
+    newNumber->number = number;
     newNumber->nextR = NULL;
     newNumber->beforeL = NULL;
     return newNumber;
@@ -38,17 +39,17 @@ void change(pNumber_t *p, char *string){
     }
 
     //整數部分開始
-    now = createNumber(*string);    //建立開頭
-    p->top = now;                   //將開頭給予最高位數指標
-    string++;                       //往下走
-    p->integerN++;                  //整數部分數量+1
+    now = createNumber(charChangeToInt(*string));   //建立開頭
+    p->top = now;                                   //將開頭給予最高位數指標
+    string++;                                       //往下走
+    p->integerN++;                                  //整數部分數量+1
     while(*string != '.'){  //處理整數部分
-        before = now;                   //前一個繼承現在的位置
-        now = createNumber(*string);    //建立新的數字
-        before->nextR = now;            //連結前後兩個數字
-        now->beforeL = before;          //
-        string++;                       //往下走
-        p->integerN++;                  //整數部分數量+1
+        before = now;                                   //前一個繼承現在的位置
+        now = createNumber(charChangeToInt(*string));   //建立新的數字
+        before->nextR = now;                            //連結前後兩個數字
+        now->beforeL = before;                          //
+        string++;                                       //往下走
+        p->integerN++;                                  //整數部分數量+1
     }
     p->digits = now;    //紀錄個位數位置
     //整數部分結束
@@ -56,20 +57,20 @@ void change(pNumber_t *p, char *string){
     string++;   //跳過小數點
 
     //小數部分開始
-    before = now;                   //前一個繼承現在的位置
-    now = createNumber(*string);    //建立小數點開始位置
-    before->nextR = now;            //連結前後兩個數字
-    now->beforeL = before;          //
-    p->dotStart = now;              //紀錄小數點起始位置
-    string++;                       //往下走
-    p->decimalN++;                  //小數部分數量+1
+    before = now;                                   //前一個繼承現在的位置
+    now = createNumber(charChangeToInt(*string));   //建立小數點開始位置
+    before->nextR = now;                            //連結前後兩個數字
+    now->beforeL = before;                          //
+    p->dotStart = now;                              //紀錄小數點起始位置
+    string++;                                       //往下走
+    p->decimalN++;                                  //小數部分數量+1
     while(*string != '\0'){ //處理小數部分
-        before = now;                   //前一個繼承現在的位置
-        now = createNumber(*string);    //建立新的數字
-        before->nextR = now;            //連結前後兩個數字
-        now->beforeL = before;          //
-        string++;                       //往下走
-        p->decimalN++;                  //小數部分數量+1
+        before = now;                                   //前一個繼承現在的位置
+        now = createNumber(charChangeToInt(*string));   //建立新的數字
+        before->nextR = now;                            //連結前後兩個數字
+        now->beforeL = before;                          //
+        string++;                                       //往下走
+        p->decimalN++;                                  //小數部分數量+1
     }
     p->low = now;   //紀錄最低位數
     //小數部分結束
@@ -114,14 +115,103 @@ void output(pNumber_t ans, int N){
     printf("\n");
 }
 
+int isBig(pNumber_t *a, pNumber_t *b){
+    number_t *t1=NULL, *t2=NULL;
+    if(a->integerN == b->integerN){ //整數相等
+        t1 = a->top;
+        t2 = b->top;
+        while(t1 == NULL || t2 == NULL){    //直到其中一個不能比較
+            if(t1->number < t2->number){        //如果t2較大
+                return 0;
+            }
+            else if(t1->number > t2->number){   //如果t1較大
+                return 1;
+            }
+            t1 = t1->nextR;
+            t2 = t2->nextR;
+        }
+        if(t1 == NULL && t2 == NULL){   //一樣大
+            return 0;
+        }
+        else if(t1 == NULL){    //t2較大
+            return 0;
+        }
+        else{   //t2 == NULL (t1較大)
+            return 1;
+        }
+    }
+    else if(a->integerN < b->integerN){ //a < b -> 不大於 = 0
+        return 0;
+    }
+    else{   //a > b -> 大於 = 1
+        return 1;
+    }
+}
+
+int adder(int *carry, int n1, int n2){  //加法器
+    int sum=0;
+    sum = n1 + n2 + *carry; //和 = 數字1 + 數字2 + 進位
+    *carry = sum / 10;      //進位 = (和 / 10) 取商
+    return sum % 10;        //和   = (和 / 10) 取餘
+}
+
+
 void add(pNumber_t *a, pNumber_t *b, pNumber_t ans, int N){
-    //加法
+    int i=0, carry=0;
+    number_t *now, *after;
+    number_t *tA, *tB;
+    tA = a->low;
+    tB = b->low;
+    if(a->integerN >= b->integerN){ //取最大的整數與小數
+        ans.integerN = a->integerN;
+    }
+    else{
+        ans.integerN = b->integerN;
+    }
+    if(a->decimalN >= b->decimalN){
+        ans.decimalN = a->decimalN;
+    }
+    else{
+        ans.decimalN = b->decimalN;
+    }
+    if(a->isNeg == b->isNeg){   //如果符號相同
+        ans.isNeg = a->isNeg;   //紀錄符號
+        carry=0;
+        i=ans.decimalN;
+        if(i > a->decimalN){
+             now = createNumber(adder(&carry, 0, ));
+        }
+        else if(i > b->decimalN){
+             now = createNumber(adder(&carry, ));
+        }
+        else{
+             now = createNumber(adder(&carry, ));
+        }
+        ans.low = now;
+        while(i >= 0){  //從小數開始加
+            after = now;
+            if(i > a->decimalN){
+                 now = createNumber(adder(&carry, ));
+            }
+            else if(i > b->decimalN){
+                 now = createNumber(adder(&carry, ));
+            }
+            else{
+                 now = createNumber(adder(&carry, ));
+            }
+            now->nextR = after;
+            after->beforeL = now;
+            i--;
+
+        }
+    }
+    else{
+
+    }
     output(ans, N);
 }
 
-int isBig(pNumber_t *a, pNumber_t *b){
-    return 0;
-}
+
 
 void sub(pNumber_t *a, pNumber_t *b, pNumber_t ans, int N){
     //減法
