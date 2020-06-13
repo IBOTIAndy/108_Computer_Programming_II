@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 //031 ProjectTime
-//2020/06/31 PM.08:00~PM.10:43 IBOTIAndy
+//2020/06/31 PM.10:50~PM.12:15 IBOTIAndy
 
 typedef struct node_s{
     int needDay;                    //需求天數
@@ -83,12 +83,75 @@ void findBranch(project_t *project){    //連結全部的節點
 }
 //----/findBranch-----
 
+//-----mathNeedDay-----
+int allCompleted(project_t *project){   //全部都完成了嗎
+    int i=0;
+    for(i=0; i < project->nodeN; i++){  //搜尋全部的節點
+        if(project->nodes[i].completed == 0){   //如果有一個節點沒完成
+            return 0;   //回傳 false
+        }
+    }   //都完成
+    return 1;   //回傳 true
+}
+
+int needAllCompleted(node_t *node){ //檢查前置節點都完成了嗎
+    int i=0;
+    for(i=0; i < node->needBranchN; i++){   //搜尋全部的前置節點
+        if(node->needOrder[i]->completed == 0){ //如果有一個沒完成
+            return 0;   //回傳 false
+        }
+    }   //都完成
+    return 1;   //回傳 true
+}
+
+//void walkNode(node_t *node, int *needDay){
+//    if(needAllCompleted(node)){     //如果全部的前置節點都完成
+//        if(*needDay - node->needDay >= 0){
+//            node->completed = 1;
+//        }
+//        if(node->completed){
+//            *needDay = *needDay - node->needDay;
+//        }
+//    }
+//}
+
+void walkNode(node_t *node, int needDay, int *allCompleted){   //瀏覽node
+    int i=0;
+//    if(needAllCompleted(node)){     //如果全部的前置節點都完成
+        if(needDay - node->needDay >= 0){   //如果扣除後，還有剩
+            node->completed = 1;    //這個路線完成
+        }
+        else{   //沒有剩
+            node->completed = 0;    //這個路線還沒完成
+            *allCompleted = 0;  //還沒有全部都完成
+        }
+        if(node->completed){    //如果路線完成，可以繼續望後走
+            for(i=0; i < node->branchN; i++){  //走全部的位置
+                walkNode(node->order[i], needDay - node->needDay, allCompleted);    //往後走
+            }
+        }
+//    }
+}
+
+void mathNeedDay(project_t *project){
+    int needDay=0, allCompleted=0;
+//    while(!allCompleted(project) || flag){  //如果還沒全部完成
+    while(!allCompleted){   //如果還沒全部完成
+        needDay++;          //每次加一天
+        allCompleted = 1;   //
+        walkNode(&(project->nodes[0]), needDay, &allCompleted); //從第一個位置開始走
+    }
+    printf("%d\n", needDay);    //全部走完 輸出需要天數
+}
+//----/mathNeedDay-----
+
 void f1(){
     int projectN=0, i=0;
     project_t project[10];
     input(project, &projectN);  //輸入
     for(i=0; i < projectN; i++){
         findBranch(&(project[i]));  //連接每個節點位置
+        mathNeedDay(&(project[i])); //找到需要天數
     }
 }
 
