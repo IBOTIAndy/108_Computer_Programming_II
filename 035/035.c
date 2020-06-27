@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 //035 polynomial
-//2020/06/19 PM.10:03 ~ PM.11:21 IBOTIAndy
+//2020/06/28 AM.00:34 ~ AM.00:47 IBOTIAndy
 
 typedef struct number_s{
     int n;
@@ -39,10 +39,20 @@ numberp_t input(){
 
 void output(numberp_t n){
     while(n != NULL){
-        printf("%d ", n->n);
+        printf("%dx^%d ", n->n, n->pol);
         n = n->next;
     }
     printf("\n");
+}
+
+int setPol(numberp_t n){
+    if(n->next == NULL){
+        n->pol = 0;
+    }
+    else{
+        n->pol = setPol(n->next) + 1;
+    }
+    return n->pol;
 }
 
 void math(numberp_t n1, numberp_t n2){
@@ -53,6 +63,8 @@ void f1(){
     numberp_t n1, n2;
     n1 = input();
     n2 = input();
+    setPol(n1);
+    setPol(n2);
 //    output(n1);
 //    output(n2);
     math(n1, n2);
