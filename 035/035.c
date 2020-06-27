@@ -97,8 +97,43 @@ void adder(numberp_t n1, numberp_t n2){
     output(ans);
 }
 
+void suber(numberp_t n1, numberp_t n2){
+    numberp_t ans=NULL, temp=NULL;
+    if(n1->pol != n2->pol){
+        if(n1->pol > n2->pol){
+            ans = createNewNumber(n1->n, n1->pol);
+            n1 = n1->next;
+        }
+        else{
+            ans = createNewNumber(0 - n2->n, n2->pol);
+            n2 = n2->next;
+        }
+    }
+    temp = ans;
+    while(n1 != NULL && n2 != NULL){
+        if(n1->pol == n2->pol){
+            temp->next = createNewNumber(n1->n - n2->n, n1->pol);
+            temp = temp->next;
+            n1 = n1->next;
+            n2 = n2->next;
+        }
+        else if(n1->pol > n2->pol){
+            temp->next = createNewNumber(n1->n, n1->pol);
+            temp = temp->next;
+            n1 = n1->next;
+        }
+        else{
+            temp->next = createNewNumber(0 - n2->n, n2->pol);
+            temp = temp->next;
+            n2 = n2->next;
+        }
+    }
+    output(ans);
+}
+
 void math(numberp_t n1, numberp_t n2){
     adder(n1, n2);
+    suber(n1, n2);
 }
 
 void f1(){
