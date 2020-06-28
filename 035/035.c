@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 //035 polynomial
-//2020/06/28 AM.00:47 ~ AM.01:11 IBOTIAndy
+//2020/06/29 AM.00:35 ~ AM.00:58 IBOTIAndy
 
 typedef struct number_s{
     int n;
@@ -131,9 +131,43 @@ void suber(numberp_t n1, numberp_t n2){
     output(ans);
 }
 
+numberp_t findPol(numberp_t head, int n, int pol){
+    numberp_t before=NULL, current=NULL;
+    if(head == NULL){
+        return createNewNumber(n, pol);
+    }
+    before = current = head;
+    while(current != NULL){
+        if(current->pol == pol){
+            current->n = current->n + n;
+            return head;
+        }
+        before = current;
+        current = current->next;
+    }
+    before->next = createNewNumber(n, pol);
+    return head;
+}
+
+void muler(numberp_t n1, numberp_t n2){
+    numberp_t ans=NULL;
+    numberp_t tn1=NULL, tn2=NULL;
+    tn1 = n1;
+    while(tn1 != NULL){
+        tn2 = n2;
+        while(tn2 != NULL){
+            ans = findPol(ans, tn1->n * tn2->n, tn1->pol + tn2->pol);
+            tn2 = tn2->next;
+        }
+        tn1 = tn1->next;
+    }
+    output(ans);
+}
+
 void math(numberp_t n1, numberp_t n2){
     adder(n1, n2);
     suber(n1, n2);
+    muler(n1, n2);
 }
 
 void f1(){
