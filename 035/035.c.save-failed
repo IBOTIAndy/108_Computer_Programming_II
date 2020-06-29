@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 //035 polynomial
-//2020/06/29 PM.03:35 ~ PM.03:48 IBOTIAndy
+//2020/06/29 AM.00:35 ~ AM.00:58 IBOTIAndy
 
 typedef struct number_s{
     int n;
